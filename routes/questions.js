@@ -7,25 +7,25 @@ router.get('/', (req, res) => {
 })
 
 router.post('/', (req, res) => {
-  Question.create(req.body)
-    .then(question => res.json(question))
+  Card.create(req.body)
+    .then(card => res.json(card))
     .catch(err => res.json(err))
 })
 
 router.delete('/:id', (req, res) => {
-  Question.findOneAndDelete({ _id: req.params.id })
+  Card.findOneAndDelete({ _id: req.params.id })
     .then(data => res.json(data))
     .catch(err => res.json(err))
 })
 
 router.post('/:id', (req, res) => {
-  Question.findById(req.params.id).then(question => {
-    if (question.likes.includes(req.body.userid)) {
+  Card.findById(req.params.id).then(card => {
+    if (card.likes.includes(req.body.userid)) {
     }
   })
 })
 // router.patch('/:id', (req, res) => {
-//   Question.findOneAndUpdate(
+//   Card.findOneAndUpdate(
 //     { _id: req.params.id },
 //     { $addToSet: { voteids: req.body.userid } }
 //   ).then(
