@@ -13,15 +13,21 @@ router.post('/', (req, res) => {
 })
 
 router.delete('/:id', (req, res) => {
-  Question.findByIdAndDelete(req.params.id)
+  Question.findOneAndDelete({ _id: req.params.id })
     .then(data => res.json(data))
     .catch(err => res.json(err))
 })
 
 router.patch('/:id', (req, res) => {
-  Question.findByIdAndUpdate(req.params.id, req.body, { new: true })
-    .then(data => res.json(data))
-    .catch(err => res.json(err))
+  console.log(req.body.userid)
+  Question.findOneAndUpdate(
+    { _id: req.params.id },
+    { $addToSet: { voteids: req.body.userid } }
+  ).then(
+    Question.findOneAndUpdate({ _id: req.params.id }, req.body, { new: true })
+      .then(data => res.json(data))
+      .catch(err => res.json(err))
+  )
 })
 
 module.exports = router

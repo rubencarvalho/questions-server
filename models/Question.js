@@ -17,6 +17,18 @@ const QuestionSchema = new mongoose.Schema({
     type: mongoose.SchemaTypes.Number,
     default: 0,
   },
+  voteids: [mongoose.SchemaTypes.String],
+  liked: {
+    type: mongoose.SchemaTypes.String,
+    default: true,
+  },
+  avatar: {
+    type: mongoose.SchemaTypes.String,
+  },
+  isnew: {
+    type: mongoose.SchemaTypes.Boolean,
+    default: true,
+  },
 })
 
 module.exports = mongoose.model('Question', QuestionSchema)
