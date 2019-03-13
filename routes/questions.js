@@ -18,17 +18,23 @@ router.delete('/:id', (req, res) => {
     .catch(err => res.json(err))
 })
 
-router.patch('/:id', (req, res) => {
-  Question.findOneAndUpdate(
-    { _id: req.params.id },
-    { $addToSet: { voteids: req.body.userid } }
-  ).then(
-    Question.findOneAndUpdate({ _id: req.params.id }, req.body, {
-      new: true,
-    })
-      .then(data => res.json(data))
-      .catch(err => res.json(err))
-  )
+router.post('/:id', (req, res) => {
+  Question.findById(req.params.id).then(question => {
+    if (question.likes.includes(req.body.userid)) {
+    }
+  })
 })
+// router.patch('/:id', (req, res) => {
+//   Question.findOneAndUpdate(
+//     { _id: req.params.id },
+//     { $addToSet: { voteids: req.body.userid } }
+//   ).then(
+//     Question.findOneAndUpdate({ _id: req.params.id }, req.body, {
+//       new: true,
+//     })
+//       .then(data => res.json(data))
+//       .catch(err => res.json(err))
+//   )
+// })
 
 module.exports = router

@@ -17,7 +17,7 @@ const QuestionSchema = new mongoose.Schema({
     type: mongoose.SchemaTypes.Number,
     default: 0,
   },
-  voteids: [mongoose.SchemaTypes.String],
+  like: [],
   liked: {
     type: mongoose.SchemaTypes.String,
     default: true,
