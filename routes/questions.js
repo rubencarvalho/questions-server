@@ -19,12 +19,13 @@ router.delete('/:id', (req, res) => {
 })
 
 router.patch('/:id', (req, res) => {
-  console.log(req.body.userid)
   Question.findOneAndUpdate(
     { _id: req.params.id },
     { $addToSet: { voteids: req.body.userid } }
   ).then(
-    Question.findOneAndUpdate({ _id: req.params.id }, req.body, { new: true })
+    Question.findOneAndUpdate({ _id: req.params.id }, req.body, {
+      new: true,
+    })
       .then(data => res.json(data))
       .catch(err => res.json(err))
   )
