@@ -2,6 +2,7 @@ const express = require('express')
 const app = express()
 const cors = require('cors')
 const mongoose = require('mongoose')
+const socket = require('socket.io')
 
 mongoose.connect('mongodb://localhost:27017/q', {
   useNewUrlParser: true,
@@ -12,6 +13,24 @@ app.use(express.json())
 app.use('/questions', require('./routes/questions.js'))
 
 const port = process.env.PORT || 3000
-app.listen(port, () => {
+const server = app.listen(port, () => {
   console.log('Server ready on port ' + port)
 })
+
+const io = socket(server)
+
+io.sockets.on('connection', socket => {
+  console.log(`new connection id: ${socket.id}`)
+  sendData(socket)
+})
+
+function sendData(socket) {
+  socket.emit(
+    'data1',
+    Array.from({ length: 8 }, () => Math.floor(Math.random() * 590) + 10)
+  )
+  console.log(`data sent`)
+  setTimeout(() => {
+    sendData(socket)
+  }, 1000)
+}

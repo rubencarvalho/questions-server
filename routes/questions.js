@@ -18,10 +18,10 @@ router.delete('/:id', (req, res) => {
     .catch(err => res.json(err))
 })
 
-router.patch('/:id', (req, res) => {
+router.post('/:id', (req, res) => {
   Question.findOneAndUpdate(
     { _id: req.params.id },
-    { $addToSet: { voteids: req.body.userid } }
+    { $addToSet: { votes: req.body.userid } }
   ).then(
     Question.findOneAndUpdate({ _id: req.params.id }, req.body, {
       new: true,
