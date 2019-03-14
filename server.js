@@ -24,14 +24,16 @@ io.sockets.on('connection', socket => {
   console.log(`new connection id: ${socket.id}`)
   sendQuestions(socket)
 })
-
 function sendQuestions(socket) {
+  console.log('im here')
+
   Question.find().then(questions => {
+    console.log('im in then find')
     socket.emit('questions', questions)
   })
   setTimeout(() => {
     sendQuestions(socket)
-  }, 1000)
+  }, 4000)
 }
 
 function sendData(socket) {
@@ -42,5 +44,5 @@ function sendData(socket) {
   console.log(`data sent`)
   setTimeout(() => {
     sendData(socket)
-  }, 4000)
+  }, 200)
 }

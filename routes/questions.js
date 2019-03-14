@@ -7,7 +7,6 @@ router.get('/', (req, res) => {
 })
 
 router.post('/', (req, res) => {
-  console.log(req.body)
   if (req.body.name === '') {
     req.body.name = 'Anonymous'
   }
@@ -47,6 +46,23 @@ router.post('/:id', (req, res) => {
         question.votes.unshift({ user: req.body.userid })
 
         question.save().then(question => res.json(question))
+      }
+    })
+    .catch(err => res.status(404).json(err))
+})
+
+router.post('/seen/:id', (req, res) => {
+  Question.findById(req.params.id)
+    .then(question => {
+      if (
+        question.seen.filter(seen => seen.user.toString() === req.body.userid)
+          .length === 0
+      ) {
+        // Add user id to seen array
+        question.seen.unshift({ user: req.body.userid })
+        question.save().then(question => res.json(question))
+      } else {
+        res.json(question)
       }
     })
     .catch(err => res.status(404).json(err))
