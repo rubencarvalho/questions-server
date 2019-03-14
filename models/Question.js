@@ -9,7 +9,10 @@ const QuestionSchema = new mongoose.Schema({
     type: mongoose.SchemaTypes.String,
     default: 'Anonymous',
   },
-  avatar: {
+  authorid: {
+    type: mongoose.SchemaTypes.String,
+  },
+  color: {
     type: mongoose.SchemaTypes.String,
   },
   date: {

@@ -32,5 +32,5 @@ function sendData(socket) {
   console.log(`data sent`)
   setTimeout(() => {
     sendData(socket)
-  }, 1000)
+  }, 4000)
 }
