@@ -11,7 +11,10 @@ router.post('/', (req, res) => {
     req.body.name = 'Anonymous'
   }
   Question.create(req.body)
-    .then(question => res.json(question))
+    .then(question => {
+      console.log(question)
+      io.emit('newQuestion', question)
+    })
     .catch(err => res.json(err))
 })
 
@@ -28,21 +31,17 @@ router.post('/:id', (req, res) => {
         question.votes.filter(vote => vote.user.toString() === req.body.userid)
           .length > 0
       ) {
-        // Get the index to be removed
         const removeIndex = question.votes
           .map(item => item.user.toString())
           .indexOf(req.body.userid)
 
-        // Splice out of array
         question.votes.splice(removeIndex, 1)
 
-        // Save
         question.save().then(question => res.json(question))
       } else if (
         question.votes.filter(vote => vote.user.toString() === req.body.userid)
           .length === 0
       ) {
-        // Add user id to votes array
         question.votes.unshift({ user: req.body.userid })
 
         question.save().then(question => res.json(question))
@@ -58,7 +57,6 @@ router.post('/seen/:id', (req, res) => {
         question.seen.filter(seen => seen.user.toString() === req.body.userid)
           .length === 0
       ) {
-        // Add user id to seen array
         question.seen.unshift({ user: req.body.userid })
         question.save().then(question => res.json(question))
       } else {

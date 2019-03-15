@@ -3,7 +3,6 @@ const app = express()
 const cors = require('cors')
 const mongoose = require('mongoose')
 const socket = require('socket.io')
-const Question = require('./models/Question')
 
 mongoose.connect('mongodb://localhost:27017/q', {
   useNewUrlParser: true,
@@ -22,27 +21,8 @@ const io = socket(server)
 
 io.sockets.on('connection', socket => {
   console.log(`new connection id: ${socket.id}`)
-  sendQuestions(socket)
 })
-function sendQuestions(socket) {
-  console.log('im here')
 
-  Question.find().then(questions => {
-    console.log('im in then find')
-    socket.emit('questions', questions)
-  })
-  setTimeout(() => {
-    sendQuestions(socket)
-  }, 4000)
-}
-
-function sendData(socket) {
-  socket.emit(
-    'data1',
-    Array.from({ length: 8 }, () => Math.floor(Math.random() * 590) + 10)
-  )
-  console.log(`data sent`)
-  setTimeout(() => {
-    sendData(socket)
-  }, 200)
+function sendNewQuestion(question) {
+  io.emit('newQuestion', question)
 }
