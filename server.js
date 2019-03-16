@@ -18,9 +18,14 @@ const server = app.listen(port, () => {
 })
 
 const io = socket(server)
+app.io = io
 
 io.sockets.on('connection', socket => {
   console.log(`new connection id: ${socket.id}`)
+})
+
+io.sockets.on('disconnect', () => {
+  console.log('user disconnected')
 })
 
 function sendNewQuestion(question) {

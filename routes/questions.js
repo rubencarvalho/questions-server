@@ -12,8 +12,7 @@ router.post('/', (req, res) => {
   }
   Question.create(req.body)
     .then(question => {
-      console.log(question)
-      io.emit('newQuestion', question)
+      req.app.io.emit('newQuestion', question)
     })
     .catch(err => res.json(err))
 })
