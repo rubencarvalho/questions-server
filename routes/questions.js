@@ -10,11 +10,13 @@ router.post('/', (req, res) => {
   if (req.body.name === '') {
     req.body.name = 'Anonymous'
   }
-  Question.create(req.body)
-    .then(question => {
-      req.app.io.emit('newQuestion', question)
-    })
-    .catch(err => res.json(err))
+  if (req.body.message.length < 161) {
+    Question.create(req.body)
+      .then(question => {
+        req.app.io.emit('newQuestion', question)
+      })
+      .catch(err => res.json(err))
+  }
 })
 
 router.delete('/:id', (req, res) => {
@@ -36,14 +38,14 @@ router.post('/:id', (req, res) => {
 
         question.votes.splice(removeIndex, 1)
 
-        question.save().then(question => res.json(question))
+        question.save().then(req.app.io.emit('newLike', question))
       } else if (
         question.votes.filter(vote => vote.user.toString() === req.body.userid)
           .length === 0
       ) {
         question.votes.unshift({ user: req.body.userid })
 
-        question.save().then(question => res.json(question))
+        question.save().then(req.app.io.emit('newLike', question))
       }
     })
     .catch(err => res.status(404).json(err))
