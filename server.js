@@ -21,13 +21,10 @@ const io = socket(server)
 app.io = io
 
 io.sockets.on('connection', socket => {
+  console.log(Object.keys(io.sockets.connected).length)
+
   console.log(`new connection id: ${socket.id}`)
+  socket.on('disconnect', () => {
+    console.log('user disconnected')
+  })
 })
-
-io.sockets.on('disconnect', () => {
-  console.log('user disconnected')
-})
-
-function sendNewQuestion(question) {
-  io.emit('newQuestion', question)
-}

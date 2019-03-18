@@ -7,6 +7,7 @@ router.get('/', (req, res) => {
 })
 
 router.post('/', (req, res) => {
+  console.log('post')
   if (req.body.name === '') {
     req.body.name = 'Anonymous'
   }
@@ -26,29 +27,38 @@ router.delete('/:id', (req, res) => {
 })
 
 router.post('/:id', (req, res) => {
-  Question.findById(req.params.id)
+  console.log('DID SMT')
+  /*Question.findById(req.params.id)
     .then(question => {
       if (
         question.votes.filter(vote => vote.user.toString() === req.body.userid)
           .length > 0
       ) {
+        console.log(question)
         const removeIndex = question.votes
           .map(item => item.user.toString())
           .indexOf(req.body.userid)
 
         question.votes.splice(removeIndex, 1)
 
-        question.save().then(req.app.io.emit('newLike', question))
+        question
+          .save()
+          .then(req.app.io.emit('newLike', question))
+          .catch(err => console.log(err))
       } else if (
         question.votes.filter(vote => vote.user.toString() === req.body.userid)
           .length === 0
       ) {
+        console.log(question)
         question.votes.unshift({ user: req.body.userid })
 
-        question.save().then(req.app.io.emit('newLike', question))
+        question
+          .save()
+          .then(req.app.io.emit('newLike', question))
+          .catch(err => console.log(err))
       }
     })
-    .catch(err => res.status(404).json(err))
+    .catch(err => res.status(404).json(err))*/
 })
 
 router.post('/seen/:id', (req, res) => {
@@ -59,7 +69,10 @@ router.post('/seen/:id', (req, res) => {
           .length === 0
       ) {
         question.seen.unshift({ user: req.body.userid })
-        question.save().then(question => res.json(question))
+        question
+          .save()
+          .then(question => res.json(question))
+          .catch(err => console.log(err))
       } else {
         res.json(question)
       }
