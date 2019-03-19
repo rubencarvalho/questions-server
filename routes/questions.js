@@ -27,14 +27,12 @@ router.delete('/:id', (req, res) => {
 })
 
 router.post('/:id', (req, res) => {
-  console.log('DID SMT')
-  /*Question.findById(req.params.id)
+  Question.findById(req.params.id)
     .then(question => {
       if (
         question.votes.filter(vote => vote.user.toString() === req.body.userid)
           .length > 0
       ) {
-        console.log(question)
         const removeIndex = question.votes
           .map(item => item.user.toString())
           .indexOf(req.body.userid)
@@ -45,23 +43,28 @@ router.post('/:id', (req, res) => {
           .save()
           .then(req.app.io.emit('newLike', question))
           .catch(err => console.log(err))
+        res.status(200).json({ question })
       } else if (
         question.votes.filter(vote => vote.user.toString() === req.body.userid)
           .length === 0
       ) {
-        console.log(question)
         question.votes.unshift({ user: req.body.userid })
 
         question
           .save()
-          .then(req.app.io.emit('newLike', question))
+          .then(res => {
+            console.log('emitting')
+            req.app.io.emit('newLike', question)
+          })
           .catch(err => console.log(err))
+        res.status(200).json({ question })
       }
     })
-    .catch(err => res.status(404).json(err))*/
+    .catch(err => res.status(404).json(err))
 })
 
 router.post('/seen/:id', (req, res) => {
+  console.log(req)
   Question.findById(req.params.id)
     .then(question => {
       if (

@@ -9,7 +9,6 @@ mongoose.connect('mongodb://localhost:27017/q', {
 })
 app.use(cors())
 app.use(express.json())
-
 app.use('/questions', require('./routes/questions.js'))
 
 const port = process.env.PORT || 3000
