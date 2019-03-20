@@ -9,26 +9,18 @@ const QuestionSchema = new mongoose.Schema({
     type: mongoose.SchemaTypes.String,
     default: 'Anonymous',
   },
+  authorid: {
+    type: mongoose.SchemaTypes.String,
+  },
+  color: {
+    type: mongoose.SchemaTypes.String,
+  },
   date: {
     type: mongoose.SchemaTypes.Date,
     default: Date.now,
   },
-  votes: {
-    type: mongoose.SchemaTypes.Number,
-    default: 0,
-  },
-  voteids: [mongoose.SchemaTypes.String],
-  liked: {
-    type: mongoose.SchemaTypes.String,
-    default: true,
-  },
-  avatar: {
-    type: mongoose.SchemaTypes.String,
-  },
-  isnew: {
-    type: mongoose.SchemaTypes.Boolean,
-    default: true,
-  },
+  votes: [],
+  seen: [],
 })
 
 module.exports = mongoose.model('Question', QuestionSchema)

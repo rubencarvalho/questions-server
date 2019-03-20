@@ -11,11 +11,16 @@
   "author": "Jeremias Erbs <jerry@badabam.de> (http://www.badabam.de/)",
   "license": "UNLICENSED",
   "dependencies": {
+    "agentkeepalive": "^4.0.2",
     "cors": "2.8.5",
     "express": "4.16.4",
     "mongoose": "5.4.14",
     "nodemon": "1.18.10",
+<<<<<<< HEAD
     "socket.io": "^2.2.0",
+=======
+    "socket-io": "^1.0.0",
+>>>>>>> 25bbb6a34afc91feb39c3add43fd39e4e72c2d22
     "uid": "0.0.2"
   }
 }

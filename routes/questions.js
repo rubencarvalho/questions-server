@@ -7,9 +7,17 @@ router.get('/', (req, res) => {
 })
 
 router.post('/', (req, res) => {
-  Card.create(req.body)
-    .then(card => res.json(card))
-    .catch(err => res.json(err))
+  if (req.body.name === '') {
+    req.body.name = 'Anonymous'
+  }
+  if (req.body.message.length < 161) {
+    Question.create(req.body)
+      .then(question => {
+        req.app.io.emit('newQuestion', question)
+        res.json(question)
+      })
+      .catch(err => res.json(err))
+  }
 })
 
 router.delete('/:id', (req, res) => {
@@ -19,10 +27,58 @@ router.delete('/:id', (req, res) => {
 })
 
 router.post('/:id', (req, res) => {
-  Card.findById(req.params.id).then(card => {
-    if (card.likes.includes(req.body.userid)) {
-    }
-  })
+  Question.findById(req.params.id)
+    .then(question => {
+      if (
+        question.votes.filter(vote => vote.user.toString() === req.body.userid)
+          .length > 0
+      ) {
+        const removeIndex = question.votes
+          .map(item => item.user.toString())
+          .indexOf(req.body.userid)
+
+        question.votes.splice(removeIndex, 1)
+
+        question
+          .save()
+          .then(req.app.io.emit('newLike', question))
+          .catch(err => console.log(err))
+        res.status(200).json({ question })
+      } else if (
+        question.votes.filter(vote => vote.user.toString() === req.body.userid)
+          .length === 0
+      ) {
+        question.votes.unshift({ user: req.body.userid })
+
+        question
+          .save()
+          .then(res => {
+            req.app.io.emit('newLike', question)
+          })
+          .catch(err => console.log(err))
+        res.status(200).json({ question })
+      }
+    })
+    .catch(err => res.status(404).json(err))
+})
+
+router.post('/seen/:id', (req, res) => {
+  Question.findById(req.params.id)
+    .then(question => {
+      if (
+        question.seen.filter(seen => seen.user.toString() === req.body.userid)
+          .length === 0
+      ) {
+        question.seen.unshift({ user: req.body.userid })
+        question
+          .save()
+          .then(question => res.json(question))
+          .catch(err => console.log(err))
+      } else {
+        res.json(question)
+      }
+    })
+    .catch(err => res.status(404).json(err))
 })
 // router.patch('/:id', (req, res) => {
 //   Card.findOneAndUpdate(
