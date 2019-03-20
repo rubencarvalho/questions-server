@@ -7,7 +7,6 @@ router.get('/', (req, res) => {
 })
 
 router.post('/', (req, res) => {
-  console.log('post')
   if (req.body.name === '') {
     req.body.name = 'Anonymous'
   }
@@ -53,7 +52,6 @@ router.post('/:id', (req, res) => {
         question
           .save()
           .then(res => {
-            console.log('emitting')
             req.app.io.emit('newLike', question)
           })
           .catch(err => console.log(err))
@@ -64,7 +62,6 @@ router.post('/:id', (req, res) => {
 })
 
 router.post('/seen/:id', (req, res) => {
-  console.log(req)
   Question.findById(req.params.id)
     .then(question => {
       if (
