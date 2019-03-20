@@ -7,6 +7,7 @@ router.get('/', (req, res) => {
 })
 
 router.post('/', (req, res) => {
+  console.log('POST REQUEST!!!')
   if (req.body.name === '') {
     req.body.name = 'Anonymous'
   }
@@ -14,6 +15,7 @@ router.post('/', (req, res) => {
     Question.create(req.body)
       .then(question => {
         req.app.io.emit('newQuestion', question)
+        res.json(question)
       })
       .catch(err => res.json(err))
   }
@@ -26,6 +28,7 @@ router.delete('/:id', (req, res) => {
 })
 
 router.post('/:id', (req, res) => {
+  console.log('POST REQUEST!!!')
   Question.findById(req.params.id)
     .then(question => {
       if (
