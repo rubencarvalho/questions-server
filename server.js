@@ -22,12 +22,27 @@ app.io = io
 
 io.sockets.on('connection', socket => {
   console.log(Object.keys(io.sockets.connected).length)
-  socket.on('load questions', () => {
-    console.log('HI')
-    Question.find().then(questions =>
-      socket.emit('questions are here', questions)
-    )
+  socket.on('newSeen', ({ question, userid }) => {
+    Question.findById(question._id).then(question => {
+      if (
+        question.seen.filter(seen => seen.user.toString() === userid).length ===
+        0
+      ) {
+        question.seen.unshift({ user: userid })
+        delete question.__v
+        question.save().catch(err => console.log(err))
+      }
+    })
+
+    console.log(question)
+    console.log(userid)
   })
+  // socket.on('load questions', () => {
+  //   console.log('HI')
+  //   Question.find().then(questions =>
+  //     socket.emit('questions are here', questions)
+  //   )
+  // })
   console.log(`new connection id: ${socket.id}`)
   socket.on('disconnect', () => {
     console.log('user disconnected')

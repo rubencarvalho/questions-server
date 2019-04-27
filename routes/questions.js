@@ -61,7 +61,7 @@ router.post('/:id', (req, res) => {
     })
     .catch(err => res.status(404).json(err))
 })
-
+// CHANGE TO ONLY GET AN ARRAY FROM QUESTIONS SEEN
 router.post('/seen/:id', (req, res) => {
   Question.findById(req.params.id)
     .then(question => {
@@ -80,6 +80,27 @@ router.post('/seen/:id', (req, res) => {
     })
     .catch(err => res.status(404).json(err))
 })
+
+router.put('/update', (req, res) => {
+  Question.find({
+    _id: { $in: req.body.questions },
+  })
+    .then(questions =>
+      questions.forEach(question => {
+        if (
+          question.seen.filter(seen => seen.user.toString() === req.body.userid)
+            .length === 0
+        ) {
+          question.seen.unshift({ user: req.body.userid })
+          delete question.__v
+          question.save().catch(err => console.log(err))
+        }
+      })
+    )
+    .catch(err => console.log(err))
+  res.status(200).json()
+})
+
 // router.patch('/:id', (req, res) => {
 //   Card.findOneAndUpdate(
 //     { _id: req.params.id },
