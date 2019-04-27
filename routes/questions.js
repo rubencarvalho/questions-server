@@ -82,7 +82,6 @@ router.post('/seen/:id', (req, res) => {
 })
 
 router.put('/update', (req, res) => {
-  console.log(req.body)
   Question.find({
     _id: { $in: req.body.questions },
   })
@@ -99,7 +98,7 @@ router.put('/update', (req, res) => {
       })
     )
     .catch(err => console.log(err))
-  res.status(200).json('Success')
+  res.status(200).json()
 })
 
 // router.patch('/:id', (req, res) => {
