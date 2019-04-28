@@ -19,6 +19,24 @@ const QuestionSchema = new mongoose.Schema({
     type: mongoose.SchemaTypes.Date,
     default: Date.now,
   },
+  status: {
+    live: {
+      type: mongoose.SchemaTypes.Boolean,
+      default: true,
+    },
+    star: {
+      type: mongoose.SchemaTypes.Boolean,
+      default: false,
+    },
+    highlight: {
+      type: mongoose.SchemaTypes.Boolean,
+      default: false,
+    },
+    archive: {
+      type: mongoose.SchemaTypes.Boolean,
+      default: false,
+    },
+  },
   votes: [],
   seen: [],
 })

@@ -12,7 +12,7 @@ app.use(cors())
 app.use(express.json())
 app.use('/questions', require('./routes/questions.js'))
 
-const port = process.env.PORT || 3000
+const port = process.env.PORT || 4000
 const server = app.listen(port, () => {
   console.log('Server ready on port ' + port)
 })
@@ -33,9 +33,6 @@ io.sockets.on('connection', socket => {
         question.save().catch(err => console.log(err))
       }
     })
-
-    console.log(question)
-    console.log(userid)
   })
   // socket.on('load questions', () => {
   //   console.log('HI')
