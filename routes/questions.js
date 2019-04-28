@@ -61,6 +61,24 @@ router.post('/:id', (req, res) => {
     })
     .catch(err => res.status(404).json(err))
 })
+
+router.put('/status/:id', (req, res) => {
+  Question.findById(req.params.id)
+    .then(question => {
+      if (req.body.userid === '8q3r8hy') {
+        question.status = req.body.status
+        question
+          .save()
+          .then(req.app.io.emit('newStatus', question))
+          .catch(err => console.log(err))
+        res.status(200).json({ question })
+      } else {
+        res.status(200).json({ question })
+      }
+    })
+    .catch(err => res.status(404).json(err))
+})
+
 // CHANGE TO ONLY GET AN ARRAY FROM QUESTIONS SEEN
 router.post('/seen/:id', (req, res) => {
   Question.findById(req.params.id)
